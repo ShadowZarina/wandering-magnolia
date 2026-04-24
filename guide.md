@@ -39,6 +39,7 @@ FINAL FEATURES
 
 ## SQL
 
+```
 CREATE DATABASE IF NOT EXISTS recipe_db;
 USE recipe_db;
 
@@ -56,9 +57,11 @@ CREATE TABLE IF NOT EXISTS recipes (
 -- Insert 1 of 6 Predefined Recipes
 INSERT INTO recipes (title, prep_time, category, ingredients, directions) 
 VALUES ('Classic Margherita Pizza', '20 mins', 'Dinner', 'Flour, Yeast, Water, Tomato Sauce, Mozzarella, Basil', '1. Prep dough. 2. Add toppings. 3. Bake at 450°F.');
+```
 
 ## db.sql
 
+```
 <?php
 $host = "localhost";
 $user = "root";
@@ -71,9 +74,107 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 ?>
-
-## 
+```
 
 # GROCERY LIST BUILDER
 
-# ADD RECIPES
+## html/js + php
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Illustra Recipes | Recipe Gallery</title>
+    <style>
+        .recipe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .recipe-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+        .recipe-card img { width: 100%; height: 150px; object-fit: cover; }
+        .modal { display: none; position: fixed; background: rgba(0,0,0,0.5); width: 100%; height: 100%; top:0; left:0; }
+        .modal-content { background: white; margin: 10% auto; padding: 20px; width: 50%; }
+    </style>
+</head>
+<body>
+
+    <h1>Recipes Page</h1>
+    <button onclick="location.href='add_recipe.php'">+ Add Own Recipe</button>
+    <hr>
+
+    <div class="recipe-grid">
+        <?php
+        include 'db.php';
+        $sql = "SELECT * FROM recipes";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "
+                <div class='recipe-card'>
+                    <img src='{$row['image_url']}' alt='Recipe Image'>
+                    <h3>{$row['title']}</h3>
+                    <p><strong>Time:</strong> {$row['prep_time']} | <strong>Cat:</strong> {$row['category']}</p>
+                    <button onclick='generateGroceryList(\"{$row['ingredients']}\")'>Generate Grocery List</button>
+                </div>";
+            }
+        }
+        ?>
+    </div>
+
+    <div id="groceryModal" class="modal">
+        <div class="modal-content">
+            <h2>Smart Grocery List</h2>
+            <div id="listItems"></div>
+            <button onclick="document.getElementById('groceryModal').style.display='none'">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function generateGroceryList(ingredients) {
+            const listDiv = document.getElementById('listItems');
+            const items = ingredients.split(','); // Assumes comma-separated
+            
+            let html = '<ul>';
+            items.forEach(item => {
+                html += `<li><input type="checkbox"> ${item.trim()}</li>`;
+            });
+            html += '</ul>';
+            
+            listDiv.innerHTML = html;
+            document.getElementById('groceryModal').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+```
+
+# ADD RECIPES (add_recipe.php)
+
+```
+<?php
+include 'db.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $title = $_POST['title'];
+    $prep = $_POST['prep_time'];
+    $cat = $_POST['category'];
+    $ing = $_POST['ingredients'];
+    $dir = $_POST['directions'];
+
+    $sql = "INSERT INTO recipes (title, prep_time, category, ingredients, directions) 
+            VALUES ('$title', '$prep', '$cat', '$ing', '$dir')";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Location: index.php");
+    }
+}
+?>
+
+<form method="POST">
+    <input type="text" name="title" placeholder="Recipe Title" required><br>
+    <input type="text" name="prep_time" placeholder="Prep Time (e.g. 30 mins)"><br>
+    <input type="text" name="category" placeholder="Category (e.g. Breakfast)"><br>
+    <textarea name="ingredients" placeholder="Ingredients (separate with commas)"></textarea><br>
+    <textarea name="directions" placeholder="Directions"></textarea><br>
+    <button type="submit">Save Recipe</button>
+</form>
+```
