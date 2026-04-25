@@ -214,3 +214,85 @@ VALUES (
     '1. Boil potatoes until tender; cool and peel. 2. Chop potatoes and eggs. 3. Whisk mayo, mustard, and seasonings. 4. Fold everything together and refrigerate.'
 );
 ```
+
+# HTML/CSS FOR RECIPE PAGE
+
+## HTML
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Detail - Allrecipes Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="recipe-container">
+    <header class="recipe-header">
+        <nav class="breadcrumb">Home > Recipes > Pasta</nav>
+        <h1 class="recipe-title">Classic Spaghetti and Meatballs</h1>
+        <div class="recipe-meta-top">
+            <span class="rating">★★★★★ 4.8 (1,240 Ratings)</span>
+        </div>
+    </header>
+
+    <section class="recipe-hero">
+        <div class="image-wrapper">
+            <img src="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F43%2F2023%2F01%2F12%2F21353-classic-spaghetti-and-meatballs-ddmfs-4x3-1504.jpg" alt="Spaghetti">
+        </div>
+        <div class="action-bar">
+            <button class="btn-action">Save</button>
+            <button class="btn-action">Print</button>
+            <button class="btn-action" onclick="showGroceryList()">Smart Grocery List</button>
+        </div>
+    </section>
+
+    <section class="recipe-stats">
+        <div class="stat-item"><strong>Prep Time:</strong> 20 mins</div>
+        <div class="stat-item"><strong>Cook Time:</strong> 40 mins</div>
+        <div class="stat-item"><strong>Total Time:</strong> 1 hr</div>
+        <div class="stat-item"><strong>Servings:</strong> 4</div>
+    </section>
+
+    <hr class="divider">
+
+    <div class="recipe-body">
+        <aside class="ingredients-section">
+            <h2>Ingredients</h2>
+            <ul class="ingredient-list">
+                <li><label><input type="checkbox"> 1 lb Spaghetti noodles</label></li>
+                <li><label><input type="checkbox"> 1/2 lb Ground beef</label></li>
+                <li><label><input type="checkbox"> 1/4 cup Breadcrumbs</label></li>
+                <li><label><input type="checkbox"> 1/4 cup Parmesan cheese</label></li>
+                <li><label><input type="checkbox"> 2 cups Marinara sauce</label></li>
+                <li><label><input type="checkbox"> 1 clove Garlic, minced</label></li>
+            </ul>
+        </aside>
+
+        <article class="directions-section">
+            <h2>Directions</h2>
+            <ol class="direction-list">
+                <li>
+                    <h3>Step 1</h3>
+                    <p>In a large bowl, combine ground beef, breadcrumbs, parmesan, and garlic. Form into 12 meatballs.</p>
+                </li>
+                <li>
+                    <h3>Step 2</h3>
+                    <p>Heat olive oil in a skillet over medium heat. Brown meatballs on all sides, about 10 minutes.</p>
+                </li>
+                <li>
+                    <h3>Step 3</h3>
+                    <p>Add marinara sauce to the skillet and simmer for 15 minutes while you boil the spaghetti in a separate pot.</p>
+                </li>
+            </ol>
+        </article>
+    </div>
+</main>
+
+</body>
+</html>
+```
+## CSS
