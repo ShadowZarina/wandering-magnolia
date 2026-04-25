@@ -178,3 +178,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button type="submit">Save Recipe</button>
 </form>
 ```
+
+# SAMPLE RECIPES IN DATABASE
+
+```
+USE recipe_db;
+
+-- 1. Spaghetti and Meatballs
+INSERT INTO recipes (title, prep_time, category, ingredients, directions) 
+VALUES (
+    'Classic Spaghetti and Meatballs', 
+    '1 hour', 
+    'Pasta', 
+    'Spaghetti noodles, Ground beef, Breadcrumbs, Parmesan cheese, Parsley, Egg, Garlic, Marinara sauce, Olive oil', 
+    '1. Mix beef, breadcrumbs, cheese, and spices; form into balls. 2. Brown meatballs in a pan. 3. Simmer meatballs in marinara sauce. 4. Serve over boiled spaghetti.'
+);
+
+-- 2. Chicken Quesadillas
+INSERT INTO recipes (title, prep_time, category, ingredients, directions) 
+VALUES (
+    'Best Chicken Quesadilla', 
+    '25 mins', 
+    'Mexican', 
+    'Flour tortillas, Cooked shredded chicken, Shredded cheese (Monterey Jack or Cheddar), Bell peppers, Onions, Taco seasoning, Butter', 
+    '1. Sauté peppers and onions with seasoning. 2. Butter one side of tortilla. 3. Layer cheese, chicken, and veggies on half. 4. Fold and grill until golden brown.'
+);
+
+-- 3. Classic Potato Salad
+INSERT INTO recipes (title, prep_time, category, ingredients, directions) 
+VALUES (
+    'Classic Potato Salad', 
+    '45 mins', 
+    'Salad / Side', 
+    'Russet potatoes, Hard-boiled eggs, Mayonnaise, Yellow mustard, Red onion, Celery, Relish, Paprika, Salt and Pepper', 
+    '1. Boil potatoes until tender; cool and peel. 2. Chop potatoes and eggs. 3. Whisk mayo, mustard, and seasonings. 4. Fold everything together and refrigerate.'
+);
+```
