@@ -295,4 +295,84 @@ VALUES (
 </body>
 </html>
 ```
+
 ## CSS
+
+```
+:root {
+    --primary-orange: #f27013;
+    --text-dark: #222;
+    --text-light: #666;
+    --bg-gray: #f9f9f9;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin: 0;
+    background-color: white;
+}
+
+.recipe-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.breadcrumb { font-size: 0.8rem; color: var(--text-light); text-transform: uppercase; }
+.recipe-title { font-size: 2.5rem; margin-top: 10px; font-weight: bold; }
+
+/* Hero */
+.recipe-hero { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin: 20px 0; }
+.image-wrapper img { width: 100%; border-radius: 8px; }
+.action-bar { display: flex; flex-direction: column; gap: 10px; }
+.btn-action {
+    padding: 12px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+.btn-action:hover { background: var(--bg-gray); }
+
+/* Stats Bar */
+.recipe-stats {
+    display: flex;
+    justify-content: space-around;
+    background: var(--bg-gray);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.divider { border: 0; border-top: 1px solid #ddd; margin: 40px 0; }
+
+/* Grid Layout for Content */
+.recipe-body {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 50px;
+}
+
+/* Ingredients */
+.ingredient-list { list-style: none; padding: 0; }
+.ingredient-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.ingredient-list input { margin-right: 10px; }
+
+/* Directions */
+.direction-list { list-style: none; padding: 0; }
+.direction-list li { margin-bottom: 30px; }
+.direction-list h3 { margin: 0 0 10px 0; text-transform: uppercase; font-size: 1rem; color: var(--text-light); }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .recipe-body { grid-template-columns: 1fr; }
+    .recipe-hero { grid-template-columns: 1fr; }
+}
+```
