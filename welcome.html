@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Illustra Recipes</title>
+    <link rel="stylesheet" href="welcome-style.css">
 </head>
-
 <body>
-  
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1 class="logo">Illustra<span>Recipes</span></h1>
+                <p class="tagline">Find, create, and organize your favorite meals in one place.</p>
+                
+                <div class="search-container">
+                    <input type="text" placeholder="Search for recipes (e.g. Pasta, Chicken)...">
+                    <button type="submit">Search</button>
+                </div>
+
+                <div class="hero-actions">
+                    <a href="index.php" class="btn btn-primary">Browse Gallery</a>
+                    <a href="add-recipe.php" class="btn btn-secondary">+ Add Your Recipe</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Featured Categories Section -->
+    <main class="categories-section">
+        <h2 class="section-title">What's on the menu?</h2>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="cat-icon">🍝</div>
+                <h3>Pasta</h3>
+            </div>
+            <div class="category-card">
+                <div class="cat-icon">🌮</div>
+                <h3>Mexican</h3>
+            </div>
+            <div class="category-card">
+                <div class="cat-icon">🥗</div>
+                <h3>Healthy</h3>
+            </div>
+            <div class="category-card">
+                <div class="cat-icon">🍰</div>
+                <h3>Desserts</h3>
+            </div>
+        </div>
+    </main>
+
+    <!-- Local Database Status Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Illustra Recipes | <span>Local Host Active</span></p>
+    </footer>
+
 </body>
 </html>
 
