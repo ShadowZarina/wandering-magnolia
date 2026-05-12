@@ -1,4 +1,4 @@
-# Wandering Magnolias 🌸
+# Wandering Magnolias 
 A recipe management web app built with PHP 8, MySQL, and vanilla CSS.
 
 ## Stack
