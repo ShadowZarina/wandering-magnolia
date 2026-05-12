@@ -2,10 +2,10 @@
 A recipe management web app built with PHP 8, MySQL, and vanilla CSS.
 
 ## Stack
-- **PHP 8+** — MVC architecture
-- **MySQL** — PDO prepared statements
-- **CSS Nesting** — no frameworks
-- **Vanilla JS** — minimal, only where needed
+- **PHP 8+**
+- **MySQL** 
+- **CSS**
+- **JS** 
 
 ## Setup
 
