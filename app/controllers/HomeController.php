@@ -9,4 +9,9 @@ class HomeController {
         }
         require ROOT . '/app/views/home.php';
     }
+
+     public function comingSoon(): void {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        require ROOT . '/app/views/coming-soon.php';
+    }
 }

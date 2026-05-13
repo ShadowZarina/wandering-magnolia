@@ -9,7 +9,7 @@ require ROOT . '/app/views/partials/navbar.php';
     <div class="container">
       <div class="hero-inner">
         <div class="hero-text">
-          <div class="hero-eyebrow">Recipe Collection</div>
+          <!-- <div class="hero-eyebrow">Recipe Collection</div> -->
           <h1>Explore <span class="accent">Culinary</span><br>Creations</h1>
           <p>Discover handcrafted recipes, build smart grocery lists, and bring your own culinary vision to life — all in one place.</p>
           <div class="hero-actions">

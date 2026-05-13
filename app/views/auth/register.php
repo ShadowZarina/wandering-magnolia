@@ -7,7 +7,6 @@ require ROOT . '/app/views/partials/navbar.php';
 <main class="auth-page">
   <div class="auth-card">
     <div class="auth-logo">
-      <div class="auth-icon">✨</div>
       <h1>Create account</h1>
       <p>Join the Wandering Magnolias community</p>
     </div>

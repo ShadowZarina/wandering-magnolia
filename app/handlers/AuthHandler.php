@@ -21,6 +21,12 @@ class AuthHandler {
             header('Location: /login'); exit;
         }
 
+        // Archived account — redirect to restore page
+        if (($user['status'] ?? 'active') === 'archived') {
+            $_SESSION['archived_user_id'] = $user['user_id'];
+            header('Location: /account/archived'); exit;
+        }
+
         $_SESSION['user_id']    = $user['user_id'];
         $_SESSION['first_name'] = $user['first_name'];
         header('Location: /recipes');

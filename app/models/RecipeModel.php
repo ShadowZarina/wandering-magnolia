@@ -2,18 +2,141 @@
 
 class RecipeModel {
     private PDO $db;
+    const PER_PAGE      = 9;
+    const PER_PAGE_USER = 6;
 
     public function __construct() {
         $this->db = Database::connect();
     }
 
     public function getAll(): array {
-        $stmt = $this->db->query('SELECT * FROM recipes ORDER BY created_at DESC');
+        $stmt = $this->db->query(
+            'SELECT r.*, u.first_name, u.last_name,
+                    orig.title AS original_title, orig.recipe_id AS original_id
+             FROM recipes r
+             LEFT JOIN users u ON r.user_id = u.user_id
+             LEFT JOIN recipes orig ON r.remixed_from = orig.recipe_id
+             WHERE r.is_deleted = 0
+             ORDER BY r.created_at DESC'
+        );
+        return $stmt->fetchAll();
+    }
+
+    public function getPaginated(int $page = 1, string $search = '', string $difficulty = ''): array {
+        $offset     = ($page - 1) * self::PER_PAGE;
+        $conditions = ['r.is_deleted = 0'];
+        $params     = [];
+
+        if ($search !== '') {
+            $conditions[] = 'r.title LIKE ?';
+            $params[]     = '%' . $search . '%';
+        }
+        if ($difficulty !== '') {
+            $conditions[] = 'r.difficulty = ?';
+            $params[]     = $difficulty;
+        }
+
+        $where = 'WHERE ' . implode(' AND ', $conditions);
+
+        $countStmt = $this->db->prepare("SELECT COUNT(*) FROM recipes r $where");
+        $countStmt->execute($params);
+        $total = (int) $countStmt->fetchColumn();
+
+        $params[] = self::PER_PAGE;
+        $params[] = $offset;
+
+        $stmt = $this->db->prepare(
+            "SELECT r.*, u.first_name, u.last_name,
+                    orig.title AS original_title, orig.recipe_id AS original_id
+             FROM recipes r
+             LEFT JOIN users u ON r.user_id = u.user_id
+             LEFT JOIN recipes orig ON r.remixed_from = orig.recipe_id
+             $where
+             ORDER BY r.created_at DESC
+             LIMIT ? OFFSET ?"
+        );
+        $stmt->execute($params);
+
+        return [
+            'recipes'      => $stmt->fetchAll(),
+            'total'        => $total,
+            'per_page'     => self::PER_PAGE,
+            'current_page' => $page,
+            'total_pages'  => (int) ceil($total / self::PER_PAGE),
+        ];
+    }
+
+    public function getByUserPaginated(int $userId, int $page = 1, string $search = ''): array {
+        $offset     = ($page - 1) * self::PER_PAGE_USER;
+        $conditions = ['r.user_id = ?', 'r.is_deleted = 0'];
+        $params     = [$userId];
+
+        if ($search !== '') {
+            $conditions[] = 'r.title LIKE ?';
+            $params[]     = '%' . $search . '%';
+        }
+
+        $where = 'WHERE ' . implode(' AND ', $conditions);
+
+        $countStmt = $this->db->prepare("SELECT COUNT(*) FROM recipes r $where");
+        $countStmt->execute($params);
+        $total = (int) $countStmt->fetchColumn();
+
+        $params[] = self::PER_PAGE_USER;
+        $params[] = $offset;
+
+        $stmt = $this->db->prepare(
+            "SELECT r.*, orig.title AS original_title, orig.recipe_id AS original_id
+             FROM recipes r
+             LEFT JOIN recipes orig ON r.remixed_from = orig.recipe_id
+             $where
+             ORDER BY r.created_at DESC
+             LIMIT ? OFFSET ?"
+        );
+        $stmt->execute($params);
+
+        return [
+            'recipes'      => $stmt->fetchAll(),
+            'total'        => $total,
+            'per_page'     => self::PER_PAGE_USER,
+            'current_page' => $page,
+            'total_pages'  => (int) ceil($total / self::PER_PAGE_USER),
+        ];
+    }
+
+    public function getByUser(int $userId): array {
+        $stmt = $this->db->prepare(
+            'SELECT r.*, orig.title AS original_title, orig.recipe_id AS original_id
+             FROM recipes r
+             LEFT JOIN recipes orig ON r.remixed_from = orig.recipe_id
+             WHERE r.user_id = ? AND r.is_deleted = 0
+             ORDER BY r.created_at DESC'
+        );
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll();
+    }
+
+    public function getTrashedByUser(int $userId): array {
+        $stmt = $this->db->prepare(
+            'SELECT r.*, orig.title AS original_title, orig.recipe_id AS original_id
+             FROM recipes r
+             LEFT JOIN recipes orig ON r.remixed_from = orig.recipe_id
+             WHERE r.user_id = ? AND r.is_deleted = 1
+             ORDER BY r.deleted_at DESC'
+        );
+        $stmt->execute([$userId]);
         return $stmt->fetchAll();
     }
 
     public function getById(int $id): array|false {
-        $stmt = $this->db->prepare('SELECT * FROM recipes WHERE recipe_id = ?');
+        $stmt = $this->db->prepare(
+            'SELECT r.*, u.first_name, u.last_name,
+                    orig.title AS original_title, orig.recipe_id AS original_id
+             FROM recipes r
+             LEFT JOIN users u ON r.user_id = u.user_id
+             LEFT JOIN recipes orig ON r.remixed_from = orig.recipe_id
+             WHERE r.recipe_id = ?'
+        );
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
@@ -34,12 +157,67 @@ class RecipeModel {
         return $stmt->fetchAll();
     }
 
-    public function create(int $userId, string $title, string $imageUrl, string $difficulty): int {
+    public function create(int $userId, string $title, string $imageUrl, string $difficulty, ?int $remixedFrom = null): int {
         $stmt = $this->db->prepare(
-            'INSERT INTO recipes (user_id, title, image_url, difficulty, is_premade) VALUES (?, ?, ?, ?, 0)'
+            'INSERT INTO recipes (user_id, title, image_url, difficulty, is_premade, remixed_from)
+             VALUES (?, ?, ?, ?, 0, ?)'
         );
-        $stmt->execute([$userId, $title, $imageUrl, $difficulty]);
+        $stmt->execute([$userId, $title, $imageUrl, $difficulty, $remixedFrom]);
         return (int) $this->db->lastInsertId();
+    }
+
+    public function update(int $recipeId, string $title, string $difficulty, ?string $imageUrl = null): void {
+        if ($imageUrl) {
+            $stmt = $this->db->prepare(
+                'UPDATE recipes SET title = ?, difficulty = ?, image_url = ? WHERE recipe_id = ?'
+            );
+            $stmt->execute([$title, $difficulty, $imageUrl, $recipeId]);
+        } else {
+            $stmt = $this->db->prepare(
+                'UPDATE recipes SET title = ?, difficulty = ? WHERE recipe_id = ?'
+            );
+            $stmt->execute([$title, $difficulty, $recipeId]);
+        }
+    }
+
+    // Soft delete — moves to trash
+    public function softDelete(int $recipeId): void {
+        $stmt = $this->db->prepare(
+            'UPDATE recipes SET is_deleted = 1, deleted_at = NOW() WHERE recipe_id = ?'
+        );
+        $stmt->execute([$recipeId]);
+    }
+
+    // Restore from trash
+    public function restore(int $recipeId): void {
+        $stmt = $this->db->prepare(
+            'UPDATE recipes SET is_deleted = 0, deleted_at = NULL WHERE recipe_id = ?'
+        );
+        $stmt->execute([$recipeId]);
+    }
+
+    // Permanent delete
+    public function delete(int $recipeId): void {
+        $stmt = $this->db->prepare('DELETE FROM recipes WHERE recipe_id = ?');
+        $stmt->execute([$recipeId]);
+    }
+
+    // Purge recipes trashed more than 30 days ago
+    public function purgeExpiredTrash(): void {
+        $stmt = $this->db->prepare(
+            'DELETE FROM recipes WHERE is_deleted = 1 AND deleted_at < NOW() - INTERVAL 30 DAY'
+        );
+        $stmt->execute();
+    }
+
+    public function clearIngredients(int $recipeId): void {
+        $stmt = $this->db->prepare('DELETE FROM ingredients WHERE recipe_id = ?');
+        $stmt->execute([$recipeId]);
+    }
+
+    public function clearDirections(int $recipeId): void {
+        $stmt = $this->db->prepare('DELETE FROM directions WHERE recipe_id = ?');
+        $stmt->execute([$recipeId]);
     }
 
     public function addIngredient(int $recipeId, string $name, float $qty, string $unit): void {

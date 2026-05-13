@@ -9,17 +9,17 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Our Stories</a></li>
-          <li><a href="#">Work with Us</a></li>
+          <li><a href="/coming-soon">About Us</a></li>
+          <li><a href="/coming-soon">Our Stories</a></li>
+          <li><a href="/coming-soon">Work with Us</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Support</h4>
         <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">User Policy</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="/coming-soon">FAQ</a></li>
+          <li><a href="/coming-soon">User Policy</a></li>
+          <li><a href="/coming-soon">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -32,7 +32,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <?= date('Y') ?> Wandering Magnolias. All rights reserved.</span>
-      <span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
+      <span><a href="/coming-soon">Privacy Policy</a> · <a href="/coming-soon">Terms</a></span>
     </div>
   </div>
 </footer>
