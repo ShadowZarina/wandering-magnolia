@@ -7,7 +7,7 @@ $currentPath = strtok($_SERVER['REQUEST_URI'], '?');
 ?>
 <nav class="navbar">
   <div class="container nav-inner">
-    <a href="/" class="nav-logo">Wandering <span>Magnolias</span></a>
+    <a href="/" class="nav-logo">Wandering <span>Magnolia</span></a>
 
     <?php if ($loggedIn): ?>
     <div class="nav-links" id="nav-links">

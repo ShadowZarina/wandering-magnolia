@@ -3,7 +3,7 @@
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="logo">Wandering <span>Magnolias</span></div>
+        <div class="logo">Wandering <span>Magnolia</span></div>
         <p>Discover, cook, and share recipes that bring people together around the table.</p>
       </div>
       <div class="footer-col">

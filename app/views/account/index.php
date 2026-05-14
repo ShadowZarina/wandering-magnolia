@@ -64,8 +64,9 @@ function accountQuery(array $overrides = []): string {
               <span class="material-symbols-outlined" style="font-size:16px;">close</span>
             </a>
           <?php endif; ?>
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+
         </div>
-        <button type="submit" class="btn btn-primary btn-sm">Search</button>
       </form>
 
       <?php if ($search): ?>

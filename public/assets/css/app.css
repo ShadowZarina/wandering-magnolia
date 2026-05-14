@@ -1022,7 +1022,7 @@ h6 {
       & .auth-icon {
         width: 56px;
         height: 56px;
-        background: var(--pink-pale);
+        /* background: var(--pink-pale); */
         border-radius: var(--radius-md);
         display: grid;
         place-items: center;
@@ -1137,6 +1137,23 @@ h6 {
       color: var(--gray-700);
     }
 
+    input[type="file"]::file-selector-button {
+      background: var(--pink);
+      padding: 8px 16px;
+      font-family: var(--font-head);
+      color: white;
+      font-weight: bold;
+      border-radius: var(--radius-xl);
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      &:hover {
+        background: black;
+        color: var(--pink);
+      }
+    }
     & input,
     & select,
     & textarea {
@@ -2428,5 +2445,69 @@ footer {
   &.urgent {
     color: var(--pink-dark);
     background: var(--pink-pale);
+  }
+}
+
+/* ─── OTP Inputs ─────────────────────────────── */
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-block: 8px;
+
+  & .otp-digit {
+    width: 52px;
+    height: 60px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: var(--font-head);
+    border: 2px solid var(--gray-100);
+    border-radius: var(--radius-md);
+    background: var(--offwhite);
+    outline: none;
+    transition:
+      border-color var(--transition),
+      box-shadow var(--transition);
+    caret-color: var(--pink);
+    padding: 0;
+
+    &:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px rgba(232, 84, 122, 0.12);
+      background: var(--white);
+    }
+  }
+}
+
+/* ─── Password Field with Toggle ─────────────── */
+.password-field {
+  position: relative;
+
+  & input {
+    padding-right: 44px !important;
+  }
+
+  & .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-300);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: color var(--transition);
+    padding: 0;
+
+    & .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    &:hover {
+      color: var(--pink);
+    }
   }
 }

@@ -63,7 +63,13 @@ class RecipeHandler {
         $ingUnits   = $_POST['ing_unit']  ?? [];
         $steps      = $_POST['direction'] ?? [];
 
-        if (!$title || !$recipeId) {
+        // Guard: no recipe ID received
+        if ($recipeId === 0) {
+            $_SESSION['form_error'] = 'Invalid recipe.';
+            header('Location: /account'); exit;
+        }
+
+        if (!$title) {
             $_SESSION['form_error'] = 'Recipe title is required.';
             header('Location: /edit-recipe?id=' . $recipeId); exit;
         }
@@ -71,10 +77,19 @@ class RecipeHandler {
         $model  = new RecipeModel();
         $recipe = $model->getById($recipeId);
 
-        if (!$recipe || (int)$recipe['user_id'] !== (int)$_SESSION['user_id']) {
-            http_response_code(403); echo '<h1>Unauthorized</h1>'; exit;
+        // Guard: recipe not found
+        if (!$recipe) {
+            http_response_code(404);
+            echo '<h1>Recipe not found</h1>'; exit;
         }
 
+        // Guard: ownership check
+        if ((int)$recipe['user_id'] !== (int)$_SESSION['user_id']) {
+            http_response_code(403);
+            echo '<h1>Unauthorized</h1>'; exit;
+        }
+
+        // Handle image upload
         $imageUrl = null;
         if (!empty($_FILES['image']['name'])) {
             $ext     = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
@@ -107,7 +122,7 @@ class RecipeHandler {
             $model->addDirection($recipeId, $stepNum++, $instruction);
         }
 
-        header('Location: /account');
+        header('Location: /recipe?id=' . $recipeId);
         exit;
     }
 
@@ -134,7 +149,6 @@ class RecipeHandler {
             http_response_code(404); echo '<h1>Original recipe not found</h1>'; exit;
         }
 
-        // Use original image unless a new one is uploaded
         $imageUrl = $original['image_url'];
         if (!empty($_FILES['image']['name'])) {
             $ext     = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
@@ -153,7 +167,7 @@ class RecipeHandler {
             $title,
             $imageUrl,
             $difficulty,
-            $originalId   // remixed_from
+            $originalId
         );
 
         foreach ($ingNames as $i => $name) {
